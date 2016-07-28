@@ -1,3 +1,4 @@
+print('Pietro')
 meu_nome = 'Pietro'
 print(meu_nome)
 print('Meu nome é: '..meu_nome)
