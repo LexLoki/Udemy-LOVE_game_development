@@ -2,23 +2,24 @@ local snake = require 'snake'
 require 'audio'
 
 local cell_size = 32
-local grid_size = {x=15,y=15}
+local grid_size = {x=20,y=20}
 local world_size = {width = cell_size*grid_size.x,height = cell_size*grid_size.y}
 local origin
 
+local checkCollision
+
 function love.load()
 	audio.load()
-	snake.load()
-	--local w,h = love.graphics.getDimensions()
-	--origin = {x = (w-world_size.width)/2, y = (h-world_size.height)/2}
+	snake.load(cell_size)
 	origin = {x=0,y=0}
 	love.window.setMode(world_size.width,world_size.height)
 end
 
 function love.update(dt)
-	if not snake.update(dt) then
-		snake.load()
+	if not snake.update(dt) or checkCollision() then
+		snake.load(cell_size)
 	end
+	
 end
 
 function love.keypressed(key)
@@ -33,4 +34,12 @@ function love.draw()
 	love.graphics.setColor(255,0,0)
 	love.graphics.rectangle('line',origin.x,origin.y,world_size.width,world_size.height)
 	snake.draw(origin)
+end
+
+function checkCollision()
+	local p = snake.headPos()
+	if p.x<0 or p.y<0 or p.x>=grid_size.x or p.y>=grid_size.y then
+		return true
+	end
+	return false
 end

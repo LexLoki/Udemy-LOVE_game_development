@@ -4,8 +4,8 @@
 -- y
 
 local snake = {}
+local size
 local parts
-local size = 32
 local time
 local update_time = 0.2
 local dir
@@ -16,7 +16,8 @@ local color = {0,0,255}
 
 local prize
 
-function snake.load()
+function snake.load(bodySize)
+	size = bodySize
 	parts = {}
 	time = 0
 	dir = {x=1,y=0}
@@ -28,6 +29,10 @@ function snake.load()
 	prize = {x=5,y=5}
 end
 
+function snake.headPos()
+	return parts[1]
+end
+
 function snake.update(dt)
 	time = time+dt
 	if time>update_time then
@@ -35,9 +40,6 @@ function snake.update(dt)
 		dir_id = next_id
 		local v,i
 		local dest = {x=parts[1].x+dir.x,y=parts[1].y+dir.y}
-		if dest.x < 0 or dest.y < 0 or dest.x >= 15 or dest.y >= 15 then
-			return false
-		end
 		for i=#parts,2,-1 do
 			parts[i].x = parts[i-1].x
 			parts[i].y = parts[i-1].y
