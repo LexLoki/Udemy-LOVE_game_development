@@ -15,6 +15,7 @@ local can_move
 local color = {0,0,255}
 
 local prize
+local spawnPrize
 
 function snake.load(bodySize)
 	size = bodySize
@@ -27,6 +28,7 @@ function snake.load(bodySize)
 	dir_id = 'r'
 	next_id = 'r'
 	prize = {x=5,y=5}
+	snake.score = 0
 end
 
 function snake.headPos()
@@ -50,7 +52,7 @@ function snake.update(dt)
 		parts[1] = dest
 		v = dest
 		if prize and v.x == prize.x and v.y == prize.y then
-			prize = {x=love.math.random(0,10),y=love.math.random(0,10)}
+			spawnPrize()
 			audio.playBeep()
 			snake.grow()
 		end
@@ -58,9 +60,34 @@ function snake.update(dt)
 	return true
 end
 
+function spawnPrize()
+	local rand = love.math.random(1,225-#parts)
+	local count = 0
+	local grid = {}
+	for i=0,14 do
+		grid[i] = {}
+		for j=0,14 do
+			grid[i][j] = true
+		end
+	end
+	for i,v in ipairs(parts) do
+		grid[v.x][v.y] = false
+	end
+	for i=0,14 do for j=0,14 do
+		if grid[i][j] then
+			count = count+1
+			if count == rand then
+				prize = {x=i,y=j}
+				return
+			end
+	end end end
+	--prize = {x=love.math.random(0,10),y=love.math.random(0,10)}
+end
+
 function snake.grow()
 	local last = parts[#parts]
 	table.insert(parts,{x=last.x,y=last.y})
+	snake.score = snake.score + 1
 end
 
 function snake.keypressed(key)
@@ -88,15 +115,17 @@ function snake.keypressed(key)
 end
 
 function snake.draw(origin)
-	for i,v in ipairs(parts) do
+	local s = size*0.95
+	for _,v in pairs(parts) do
 		love.graphics.setColor(255,255,255)
-		love.graphics.rectangle('line', origin.x + v.x*size, origin.y + v.y*size, size, size)
+		--love.graphics.rectangle('line', origin.x + v.x*size, origin.y + v.y*size, size, size)
 		love.graphics.setColor(color)
-		love.graphics.rectangle('fill', origin.x + v.x*size, origin.y + v.y*size, size, size)
+		love.graphics.rectangle('fill', origin.x + v.x*size+(size-s)/2, origin.y + v.y*size+(size-s)/2, s, s,size/5,size/5)
 	end
 	if prize then
 		love.graphics.setColor(255,255,0)
-		love.graphics.rectangle('fill',origin.x + prize.x*size,origin.y + prize.y*size,size,size)
+		love.graphics.circle('fill', origin.x + (prize.x+0.5)*size,origin.y + (prize.y+0.5)*size,size/2)
+		--love.graphics.rectangle('fill',origin.x + prize.x*size,origin.y + prize.y*size,size,size)
 	end
 end
 
