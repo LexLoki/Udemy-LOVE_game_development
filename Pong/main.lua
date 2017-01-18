@@ -1,4 +1,5 @@
 local gm = require "GameManager"
+io.stdout:setvbuf("no")
 
 local isActive = false
 

@@ -4,11 +4,15 @@ local Player = {
 
 function Player.new(x,y,width,height)
 	local self = {x=x,y=y,width=width,height=height,_speed=400,speed=400,keys={right='right',left='left'}}
+	self.lastx = x
+	self.lasty = y
 	setmetatable(self, {__index=Player})
 	return self
 end
 
 function Player:update(dt)
+	self.lastx = self.x
+	self.lasty = self.y
 	local k = self.keys
 	if k then
 		local dir

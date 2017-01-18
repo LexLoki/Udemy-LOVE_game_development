@@ -2,6 +2,8 @@ print('Pietro')
 meu_nome = 'Pietro'
 print(meu_nome)
 print('Meu nome é: '..meu_nome)
+io.write('Meu nome é: ')
+print(meu_nome)
 
 print(num)
 num = 2

@@ -15,4 +15,4 @@ print('Voce entrou com os numeros: '..num_1..' e '..num_2)
 soma = num_1 + num_2
 print('A soma desses numeros é: '..soma)
 sub = num_1 - num_2
-print('O primeiro numeros menos o segundo é: '..sub)
+print('O primeiro numero menos o segundo é: '..sub)
